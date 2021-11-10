@@ -93,6 +93,10 @@
     <Compile Include="Tables\Etat.cs" />
     <Compile Include="Tables\FicheFrais.cs" />
     <Compile Include="Tables\FraisForfait.cs" />
+    <Compile Include="Tables\LigneFraisForfait.cs" />
+    <Compile Include="Tables\LigneFraisHorsForfait.cs" />
+    <Compile Include="Tables\LignePuissanceVehicule.cs" />
+    <Compile Include="Tables\PuissanceVehicule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
