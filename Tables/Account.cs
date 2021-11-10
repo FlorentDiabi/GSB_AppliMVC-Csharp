@@ -21,7 +21,7 @@ namespace GSB_AppliMVC.Tables
         private string code;
         private int accountType;
 
-        public Account(string id, string nom, string prenom, string login, string mdp, string adresse, string cp, string ville, DateTime dateEmbauche, string email, string code, int accountType)
+        public Account(string id, string nom, string prenom, string login, string mdp, string adresse, string cp, string ville, string email, string code, int accountType)
         {
             this.id = id;
             this.nom = nom;
@@ -31,11 +31,11 @@ namespace GSB_AppliMVC.Tables
             this.adresse = adresse;
             this.cp = cp;
             this.ville = ville;
-            this.dateEmbauche = dateEmbauche;
             this.email = email;
             this.code = code;
             this.accountType = accountType;
         }
+
 
         public string Id { get => id; set => id = value; }
         public string Nom { get => nom; set => nom = value; }

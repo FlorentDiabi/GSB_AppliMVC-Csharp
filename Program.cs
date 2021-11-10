@@ -12,6 +12,7 @@ namespace GSB_AppliMVC
         {
             ConnexionSQL connexionSQL = new ConnexionSQL();
             connexionSQL.Ouvrir();
+            Console.WriteLine(connexionSQL.SelectUnAccount("a131"));
             connexionSQL.Fermer();
             Console.ReadKey();
         }

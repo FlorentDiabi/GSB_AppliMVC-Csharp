@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GSB_AppliMVC.Tables;
 using MySql.Data.MySqlClient;
 
 namespace GSB_AppliMVC
@@ -62,54 +63,117 @@ namespace GSB_AppliMVC
         }
 
 
-        //public  List<string> SelectionnerTout(string tableName)
-        //{
-        //    string sql = "select * from  @tableName";
-        //    List<string> resultat = new List<string>();
+        public Account SelectUnAccount(string iD)
+        {
+            string sql = "select * from account where id = @id";
 
-        //    try
-        //    {
-        //        MySqlCommand cmd = new MySqlCommand(sql, this.connexion);
-        //        cmd.Parameters.AddWithValue("@tableName", tableName);
-        //        MySqlDataReader reader = cmd.ExecuteReader();
+            string id = "";
+            string nom = "";
+            string prenom = "";
+            string login = "";
+            string mdp = "";
+            string adresse = "";
+            string cp = "";
+            string ville = "";
+            string email = "";
+            string code = "";
+            int accountType = 0;
 
-        //        while (reader.Read())
-        //        {
-        //            resultat
-        //        }
-        //    }
-        //} 
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(sql, this.connexion);
+                cmd.Parameters.AddWithValue("@id", iD);
+                MySqlDataReader reader = cmd.ExecuteReader();
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+                while (reader.Read())
+                {
+                    id = (String)reader["id"];
+                    nom = (String)reader["nom"];
+                    prenom = (String)reader["prenom"];
+                    login = (String)reader["login"];
+                    mdp = (String)reader["mdp"];
+                    adresse = (String)reader["adresse"];
+                    cp = (String)reader["cp"];
+                    ville = (String)reader["ville"];
+                    email = (String)reader["email"];
+                    code = (String)(reader["code"]);
+                    accountType = Convert.ToInt32(reader["accountType"]);
+                }
+                Account unAccount = new Account(id, nom, prenom, login, mdp, adresse, cp, ville, email, code, accountType);
+                reader.Close();
+                return unAccount;
+            }catch(MySqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+
+        public List<object> SelectionnerTout(string tableName)
+        {
+            string sql = "select * from  @tableName";
+
+            try
+            {
+                List<object> objetsSelectionnes = new List<object>();
+                MySqlCommand cmd = new MySqlCommand(sql, this.connexion);
+                cmd.Parameters.AddWithValue("@tableName", "account");
+                cmd.Prepare();
+                MySqlDataReader reader = cmd.ExecuteReader();
+                int index = 0;
+                while (reader.Read())
+                {
+                    List<string> param = new List<string>();
+                    param.Add((String)reader[index]);
+                    objetsSelectionnes.Add(GetInstance(tableName, param));
+                    index++;
+                }
+                return objetsSelectionnes;
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        private object GetInstance(string str, List<string> param)
+        {
+            Type t = Type.GetType(str);
+            return Activator.CreateInstance(t, param);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //public void SlectionnerAccount(string iD)
         //{
         //    string sql = "select * from account where id=@id";
@@ -150,6 +214,6 @@ namespace GSB_AppliMVC
         //    }
 
         //}
-        
+
     }
 }
