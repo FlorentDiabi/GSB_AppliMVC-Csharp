@@ -58,92 +58,64 @@ namespace GSB_AppliMVC
             {
                 Console.WriteLine(ex.Message);
             }
+        }
 
-
+        public void Insert(string tableName, Dictionary<string, string> listeParams)
+        {
+            string sql = "insert into @tableName (";
+            foreach (KeyValuePair<string, string> param in listeParams)
+            {
+                sql += param.Key;
+                sql += ", ";
+            }
+            sql += ") values (";
+            for (int i=0; i < listeParams.Count; i++)
+            {
+                sql += "?";
+                if (i < listeParams.Count - 1)
+                {
+                    sql += ", ";
+                }
+            }
+            sql += ")";
         }
 
 
-        public Account SelectUnAccount(string iD)
+        public List<Account> SelectAllAccounts()
         {
-            string sql = "select * from account where id = @id";
-
-            string id = "";
-            string nom = "";
-            string prenom = "";
-            string login = "";
-            string mdp = "";
-            string adresse = "";
-            string cp = "";
-            string ville = "";
-            string email = "";
-            string code = "";
-            int accountType = 0;
+            string sql = "select * from account";
 
             try
             {
+                List<Account> accounts = new List<Account>();
                 MySqlCommand cmd = new MySqlCommand(sql, this.connexion);
-                cmd.Parameters.AddWithValue("@id", iD);
                 MySqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    id = (String)reader["id"];
-                    nom = (String)reader["nom"];
-                    prenom = (String)reader["prenom"];
-                    login = (String)reader["login"];
-                    mdp = (String)reader["mdp"];
-                    adresse = (String)reader["adresse"];
-                    cp = (String)reader["cp"];
-                    ville = (String)reader["ville"];
-                    email = (String)reader["email"];
-                    code = (String)(reader["code"]);
-                    accountType = Convert.ToInt32(reader["accountType"]);
+                    string id = (String)reader["id"];
+                    string nom = (String)reader["nom"];
+                    string prenom = (String)reader["prenom"];
+                    string login = (String)reader["login"];
+                    string mdp = (String)reader["mdp"];
+                    string adresse = (String)reader["adresse"];
+                    string cp = (String)reader["cp"];
+                    string ville = (String)reader["ville"];
+                    string email = (String)reader["email"];
+                    string code = (String)(reader["code"]);
+                    int accountType = Convert.ToInt32(reader["accountType"]);
+
+                    accounts.Add(new Account(id, nom, prenom, login, mdp, adresse, cp, ville, email, code, accountType));
                 }
-                Account unAccount = new Account(id, nom, prenom, login, mdp, adresse, cp, ville, email, code, accountType);
+                
                 reader.Close();
-                return unAccount;
+                return accounts;
             }catch(MySqlException ex)
             {
                 Console.WriteLine(ex.Message);
                 return null;
             }
         }
-
-
-        public List<object> SelectionnerTout(string tableName)
-        {
-            string sql = "select * from  @tableName";
-
-            try
-            {
-                List<object> objetsSelectionnes = new List<object>();
-                MySqlCommand cmd = new MySqlCommand(sql, this.connexion);
-                cmd.Parameters.AddWithValue("@tableName", "account");
-                cmd.Prepare();
-                MySqlDataReader reader = cmd.ExecuteReader();
-                int index = 0;
-                while (reader.Read())
-                {
-                    List<string> param = new List<string>();
-                    param.Add((String)reader[index]);
-                    objetsSelectionnes.Add(GetInstance(tableName, param));
-                    index++;
-                }
-                return objetsSelectionnes;
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-        }
-
-        private object GetInstance(string str, List<string> param)
-        {
-            Type t = Type.GetType(str);
-            return Activator.CreateInstance(t, param);
-        }
-
 
 
 

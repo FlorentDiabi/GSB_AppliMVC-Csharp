@@ -49,5 +49,6 @@ namespace GSB_AppliMVC.Tables
         public string Email { get => email; set => email = value; }
         public string Code { get => code; set => code = value; }
         public int AccountType { get => accountType; set => accountType = value; }
+
     }
 }
