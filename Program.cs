@@ -1,20 +1,22 @@
-﻿using System;
+﻿using GSB_AppliMVC_Csharp.Gsb;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GSB_AppliMVC
+namespace GSB_AppliMVC_Csharp
 {
     class Program
     {
         static void Main(string[] args)
         {
-            ConnexionSQL connexionSQL = new ConnexionSQL();
-            connexionSQL.Ouvrir();
-            Console.WriteLine(connexionSQL.SelectUnAccount("a131"));
-            connexionSQL.Fermer();
-            Console.ReadKey();
+            var context = new gsb_fraisContext();
+            DbSet<Account> accounts = context.Account;
+            Console.WriteLine("Affichage des comptes : ");
+            foreach (Account account in accounts)
+            {
+                Console.WriteLine("[" + account.Id + "] " + account.Nom + " " + account.Prenom + ", " + account.EstVisiteur());
+            }
+            
         }
     }
 }
